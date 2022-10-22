@@ -40,6 +40,13 @@ Out[4]: {'name': '2CPU/8GB/60GB (Falcon S 202202)', 'redis_size': '1024'}
 
 ```
 
+## Development
+
+To run the unit tests you can us `tox`:
+```
+tox
+```
+
 ## Related projects
 
 - The official [Hypernode API PHP Client](https://github.com/byteinternet/hypernode-api-php)
