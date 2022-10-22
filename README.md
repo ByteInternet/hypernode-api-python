@@ -17,3 +17,31 @@ pip install -r requirements/development.txt
 ### Acquiring an API token
 
 Each Hypernode has an API token associated with it, you can use that to talk to the API directly. You can find the token in `/etc/hypernode/hypernode_api_token`. For API tokens with special permissions please contact support@hypernode.com.
+
+
+### Installing the library in your project
+
+First make sure your project has the library installed:
+```bash
+pip install -e git+https://github.com/byteinternet/hypernode-api-python.git@master#egg=hypernode_api_python
+```
+Of course you might want to put that in a `requirements.txt` file in your project instead of installing it manually.
+
+Then to use the API client you can test out an example request in your Python repl:
+```bash
+[1]: from hypernode_api_python.client import HypernodeAPIPython
+
+In [2]: client = HypernodeAPIPython(token='yoursecrettoken')
+
+In [3]: response = client.get_app_flavor('yourhypernodeappname')
+
+In [4]: response.json()
+Out[4]: {'name': '2CPU/8GB/60GB (Falcon S 202202)', 'redis_size': '1024'}
+
+```
+
+## Related projects
+
+- The official [Hypernode API PHP Client](https://github.com/byteinternet/hypernode-api-php)
+- The official [Hypernode Deploy](https://github.com/byteinternet/hypernode-deploy-configuration) tool
+- The official [Hypernode Docker](https://github.com/byteinternet/hypernode-docker) image

@@ -1,1 +1,19 @@
-venv/
+# python
+__pycache__
+*.pyc
+*.egg-info
+.eggs
+/dist
+/pip-selfcheck.json
+
+# virtualenv
+/.venv
+/.virtualenv
+/include
+/lib
+/lib64
+/share
+/venv
+
+# misc
+.idea
