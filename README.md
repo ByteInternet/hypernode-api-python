@@ -27,24 +27,44 @@ pip install -e git+https://github.com/byteinternet/hypernode-api-python.git@mast
 ```
 Of course you might want to put that in a `requirements.txt` file in your project instead of installing it manually.
 
+###  Performing API calls
+
 Then to use the API client you can test out an example request in your Python repl:
-```bash
-[1]: from hypernode_api_python.client import HypernodeAPIPython
+```python
+from hypernode_api_python.client import HypernodeAPIPython
 
-In [2]: client = HypernodeAPIPython(token='yoursecrettoken')
+client = HypernodeAPIPython(token='yoursecrettoken')
 
-In [3]: response = client.get_app_flavor('yourhypernodeappname')
+response = client.get_app_flavor('yourhypernodeappname')
 
-In [4]: response.json()
-Out[4]: {'name': '2CPU/8GB/60GB (Falcon S 202202)', 'redis_size': '1024'}
-
+response.json()
+{'name': '2CPU/8GB/60GB (Falcon S 202202)', 'redis_size': '1024'}
 ```
+
+Using the Hypernode-API you can automate all kinds of cool things like configuring settings:
+```python
+client.set_app_setting('yourhypernodeappname', 'php_version', '8.1').json()
+{'name': 'yourhypernodeappname', 'type': 'persistent', 'php_version': '8.1', ...}
+```
+
+To even performing acts of cloud automation, like scaling to the first next larger plan:
+```python
+client.xgrade(
+    'yourhypernodeappname',
+      data={
+          'product': client.get_next_best_plan_for_app_or_404(
+              'yourhypernodeappname'
+          ).json()['code']
+      }
+)
+```
+
 
 ## Development
 
-To run the unit tests you can us `tox`:
-```
-tox
+To run the unit tests you can use `tox`:
+```bash
+tox -r
 ```
 
 ## Related projects
