@@ -16,7 +16,7 @@ pip install -r requirements/development.txt
 
 ### Acquiring an API token
 
-Each Hypernode has an API token associated with it, you can use that to talk to the API directly. You can find the token in `/etc/hypernode/hypernode_api_token`. For API tokens with special permissions please contact support@hypernode.com.
+Each Hypernode has an API token associated with it, you can use that to talk to the API directly. You can find the token in `/etc/hypernode/hypernode_api_token`. For API tokens with special permissions please contact support@hypernode.com. Not all functionality in the API is currently generally available but if you'd like to start automating and have an interesting use-case we'd love to hear from you.
 
 
 ### Installing the library in your project
@@ -26,6 +26,15 @@ First make sure your project has the library installed:
 pip install -e git+https://github.com/byteinternet/hypernode-api-python.git@master#egg=hypernode_api_python
 ```
 Of course you might want to put that in a `requirements.txt` file in your project instead of installing it manually.
+
+Alternatively, you can also install the [hypernode-api-python library from PyPI](https://pypi.org/project/hypernode-api-python/):
+```
+$ python3 -m venv venv
+$ . venv/bin/activate
+$ pip install hypernode-api-python
+$ pip freeze | grep hypernode-api-python
+hypernode-api-python==0.0.1
+```
 
 ###  Performing API calls
 
