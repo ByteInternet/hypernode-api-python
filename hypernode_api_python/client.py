@@ -630,6 +630,19 @@ class HypernodeAPIPython:
         """
         return self.requests("POST", HYPERNODE_API_APP_ORDER_ENDPOINT, data=data)
 
+    def get_active_branchers(self, app_name):
+        """
+        List all active brancher nodes of your Hypernode.
+
+        :param str app_name: The name of the Hypernode to create the branch from
+        :return obj response: The request response object
+        """
+        HYPERNODE_API_APP_BRANCHER_ENDPOINT = "/v2/app/{}/brancher/"
+
+        return self.requests(
+            "GET", HYPERNODE_API_APP_BRANCHER_ENDPOINT.format(app_name)
+        )
+
     def create_brancher(self, app_name, data):
         """
         Create a new branch (server replica) of your Hypernode.
