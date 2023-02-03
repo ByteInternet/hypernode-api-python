@@ -633,8 +633,30 @@ class HypernodeAPIPython:
     def get_active_branchers(self, app_name):
         """
         List all active brancher nodes of your Hypernode.
+        Example:
+        >    client.get_active_branchers('yourhypernodeappname').json()
+        >    {
+        >        "totalTime": 9417.327453,
+        >        "totalAmountSpent": 9417.327453,
+        >        "branchers": [
+        >            {
+        >                "id": 21,
+        >                "name": "yourhypernodeappname-eph123456",
+        >                "ip": "127.0.0.1",
+        >                "elapsed_time": "5008.662653",
+        >                "description": "PHP version 7.1"
+        >            },
+        >            {
+        >                "id": 22,
+        >                "name": "yourhypernodeappname-eph654321",
+        >                "ip": "52.68.96.58",
+        >                "elapsed_time": "4408.6648",
+        >                "description": null
+        >            }
+        >        ]
+        >    }
 
-        :param str app_name: The name of the Hypernode to create the branch from
+        :param str app_name: The name of the Hypernode to get your active branchers for
         :return obj response: The request response object
         """
         HYPERNODE_API_APP_BRANCHER_ENDPOINT = "/v2/app/{}/brancher/"
