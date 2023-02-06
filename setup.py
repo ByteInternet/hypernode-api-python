@@ -18,7 +18,7 @@ requests
 
 setup(
     name="hypernode_api_python",
-    version="0.0.2",
+    version="0.0.3",
     description='"Hypernode API Client for Python"',
     url="https://github.com/ByteInternet/hypernode_api_python",
     packages=find_packages(

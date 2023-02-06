@@ -636,7 +636,7 @@ class HypernodeAPIPython:
 
         :param str app_name: The name of the Hypernode to create the branch from
         :param dict data: Data regarding the branch to be created. An example could be:
-        {'clear': 'mysql'}.
+        {'clear_services': ['mysql', 'cron']}.
         :return obj response: The request response object
         """
         return self.requests(

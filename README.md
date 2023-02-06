@@ -33,7 +33,7 @@ $ python3 -m venv venv
 $ . venv/bin/activate
 $ pip install hypernode-api-python
 $ pip freeze | grep hypernode-api-python
-hypernode-api-python==0.0.2
+hypernode-api-python==0.0.3
 ```
 
 ###  Performing API calls
