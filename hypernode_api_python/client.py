@@ -636,8 +636,6 @@ class HypernodeAPIPython:
         Example:
         >    client.get_active_branchers("yourhypernodeappname").json()
         >    {
-        >        "total_time": 15048,
-        >        "total_amount_spent": 252,
         >        "branchers": [
         >            {
         >                "id": 21,
