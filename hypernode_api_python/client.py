@@ -645,7 +645,6 @@ class HypernodeAPIPython:
         >                "created": "2019-08-24T14:15:22Z"
         >                "ip": "127.0.0.1",
         >                "elapsed_time": 7824,
-        >                "description": "PHP version 7.1"
         >            },
         >            {
         >                "id": 22,
@@ -653,7 +652,6 @@ class HypernodeAPIPython:
         >                "ip": "52.68.96.58",
         >                "created": "2019-08-24T14:15:22Z"
         >                "elapsed_time": 7224,
-        >                "description": None
         >            }
         >        ]
         >    }
