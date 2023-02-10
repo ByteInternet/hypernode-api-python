@@ -630,6 +630,39 @@ class HypernodeAPIPython:
         """
         return self.requests("POST", HYPERNODE_API_APP_ORDER_ENDPOINT, data=data)
 
+    def get_active_branchers(self, app_name):
+        """
+        List all active brancher nodes of your Hypernode.
+        Example:
+        >    client.get_active_branchers("yourhypernodeappname").json()
+        >    {
+        >        "monthly_total_time": 6397,
+        >        "monthly_total_cost": 109,
+        >        "branchers": [
+        >            {
+        >                "id": 21,
+        >                "name": "yourhypernodeappname-eph123456",
+        >                "created": "2019-08-24T14:15:22Z"
+        >                "ip": "127.0.0.1",
+        >                "elapsed_time": 7824,
+        >            },
+        >            {
+        >                "id": 22,
+        >                "name": "yourhypernodeappname-eph654321",
+        >                "ip": "52.68.96.58",
+        >                "created": "2019-08-24T14:15:22Z"
+        >                "elapsed_time": 7224,
+        >            }
+        >        ]
+        >    }
+
+        :param str app_name: The name of the Hypernode to get your active branchers for
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "GET", HYPERNODE_API_APP_BRANCHER_ENDPOINT.format(app_name)
+        )
+
     def create_brancher(self, app_name, data):
         """
         Create a new branch (server replica) of your Hypernode.
