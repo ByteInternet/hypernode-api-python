@@ -10,6 +10,7 @@ HYPERNODE_API_APP_DETAIL_WITH_ADDONS_ENDPOINT = "/v2/app/{}/with_addons?destroye
 HYPERNODE_API_APP_EAV_DESCRIPTION_ENDPOINT = "/v2/app/eav_descriptions/"
 HYPERNODE_API_APP_FLAVOR_ENDPOINT = "/v2/app/{}/flavor/"
 HYPERNODE_API_APP_BRANCHER_ENDPOINT = "/v2/app/{}/brancher/"
+HYPERNODE_API_BRANCHER_ENDPOINT = "/v2/brancher/{}/"
 HYPERNODE_API_APP_NEXT_BEST_PLAN_ENDPOINT = "/v2/app/{}/next_best_plan/"
 HYPERNODE_API_APP_PRODUCT_LIST_ENDPOINT = "/v2/product/app/{}/"
 HYPERNODE_API_APP_XGRADE_CHECK_ENDPOINT = "/v2/app/xgrade/{}/check/{}/"
@@ -674,4 +675,15 @@ class HypernodeAPIPython:
         """
         return self.requests(
             "POST", HYPERNODE_API_APP_BRANCHER_ENDPOINT.format(app_name), data=data
+        )
+
+    def destroy_brancher(self, brancher_name):
+        """
+        Destroy an existing brancher node of your Hypernode.
+
+        :param str brancher_name: The name of the brancher node to destroy.
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "DELETE", HYPERNODE_API_BRANCHER_ENDPOINT.format(brancher_name)
         )
