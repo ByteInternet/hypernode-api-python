@@ -9,7 +9,7 @@ HYPERNODE_API_APP_DETAIL_ENDPOINT = "/v2/app/{}/?destroyed=false"
 HYPERNODE_API_APP_DETAIL_WITH_ADDONS_ENDPOINT = "/v2/app/{}/with_addons?destroyed=false"
 HYPERNODE_API_APP_EAV_DESCRIPTION_ENDPOINT = "/v2/app/eav_descriptions/"
 HYPERNODE_API_APP_FLAVOR_ENDPOINT = "/v2/app/{}/flavor/"
-HYPERNODE_API_APP_BRANCHER_ENDPOINT = "/v2/app/{}/brancher/"
+HYPERNODE_API_BRANCHER_APP_ENDPOINT = "/v2/brancher/app/{}/"
 HYPERNODE_API_BRANCHER_ENDPOINT = "/v2/brancher/{}/"
 HYPERNODE_API_APP_NEXT_BEST_PLAN_ENDPOINT = "/v2/app/{}/next_best_plan/"
 HYPERNODE_API_APP_PRODUCT_LIST_ENDPOINT = "/v2/product/app/{}/"
@@ -663,7 +663,7 @@ class HypernodeAPIPython:
         :return obj response: The request response object
         """
         return self.requests(
-            "GET", HYPERNODE_API_APP_BRANCHER_ENDPOINT.format(app_name)
+            "GET", HYPERNODE_API_BRANCHER_APP_ENDPOINT.format(app_name)
         )
 
     def create_brancher(self, app_name, data):
@@ -676,7 +676,7 @@ class HypernodeAPIPython:
         :return obj response: The request response object
         """
         return self.requests(
-            "POST", HYPERNODE_API_APP_BRANCHER_ENDPOINT.format(app_name), data=data
+            "POST", HYPERNODE_API_BRANCHER_APP_ENDPOINT.format(app_name), data=data
         )
 
     def destroy_brancher(self, brancher_name):
