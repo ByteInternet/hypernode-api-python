@@ -643,16 +643,20 @@ class HypernodeAPIPython:
         >            {
         >                "id": 21,
         >                "name": "yourhypernodeappname-eph123456",
+        >                "cost": 131,
         >                "created": "2019-08-24T14:15:22Z"
         >                "ip": "127.0.0.1",
+        >                "end_time": None,
         >                "elapsed_time": 7824,
         >                "labels": {"description": "php upgrade test", "label without equal sign": None},
         >            },
         >            {
         >                "id": 22,
         >                "name": "yourhypernodeappname-eph654321",
+        >                "cost": 121,
         >                "ip": "52.68.96.58",
         >                "created": "2019-08-24T14:15:22Z"
+        >                "end_time": None,
         >                "elapsed_time": 7224,
         >                "labels": {},
         >            }
