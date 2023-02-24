@@ -2,7 +2,7 @@ from unittest import TestCase
 from unittest.mock import Mock
 
 from hypernode_api_python.client import (
-    HYPERNODE_API_APP_BRANCHER_ENDPOINT,
+    HYPERNODE_API_BRANCHER_APP_ENDPOINT,
     HypernodeAPIPython,
 )
 
@@ -15,14 +15,14 @@ class TestCreateBrancher(TestCase):
         self.app_name = "my_app"
 
     def test_brancher_endpoint_is_correct(self):
-        self.assertEqual("/v2/app/{}/brancher/", HYPERNODE_API_APP_BRANCHER_ENDPOINT)
+        self.assertEqual("/v2/brancher/app/{}/", HYPERNODE_API_BRANCHER_APP_ENDPOINT)
 
     def test_calls_create_brancher_endpoint_properly(self):
         data = {"clear_services": ["mysql"]}
         self.client.create_brancher(self.app_name, data)
 
         self.mock_request.assert_called_once_with(
-            "POST", f"/v2/app/{self.app_name}/brancher/", data=data
+            "POST", f"/v2/brancher/app/{self.app_name}/", data=data
         )
 
     def test_returns_create_brancher_data(self):
