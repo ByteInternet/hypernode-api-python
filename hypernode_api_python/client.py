@@ -10,6 +10,8 @@ HYPERNODE_API_APP_DETAIL_WITH_ADDONS_ENDPOINT = "/v2/app/{}/with_addons?destroye
 HYPERNODE_API_APP_EAV_DESCRIPTION_ENDPOINT = "/v2/app/eav_descriptions/"
 HYPERNODE_API_APP_FLAVOR_ENDPOINT = "/v2/app/{}/flavor/"
 HYPERNODE_API_BRANCHER_APP_ENDPOINT = "/v2/brancher/app/{}/"
+HYPERNODE_API_BRANCHER_APP_YEAR_HISTORY_ENDPOINT = "/v2/brancher/app/{}/year-history/"
+HYPERNODE_API_BRANCHER_APP_MONTH_HISTORY_ENDPOINT = "/v2/brancher/app/{}/month-history/{}/{}"
 HYPERNODE_API_BRANCHER_ENDPOINT = "/v2/brancher/{}/"
 HYPERNODE_API_APP_NEXT_BEST_PLAN_ENDPOINT = "/v2/app/{}/next_best_plan/"
 HYPERNODE_API_APP_PRODUCT_LIST_ENDPOINT = "/v2/product/app/{}/"
@@ -315,7 +317,8 @@ class HypernodeAPIPython:
         """
         error_to_raise = error_to_raise if error_to_raise else RuntimeError
         response = self.requests(
-            "GET", HYPERNODE_API_PRODUCT_PRICE_DETAIL_ENDPOINT.format(product_code)
+            "GET", HYPERNODE_API_PRODUCT_PRICE_DETAIL_ENDPOINT.format(
+                product_code)
         )
         if response.status_code == 404:
             raise error_to_raise
@@ -408,7 +411,8 @@ class HypernodeAPIPython:
         """
         filter_data = filter_data or {}
         return self.requests(
-            "GET", HYPERNODE_API_WHITELIST_ENDPOINT.format(app_name), filter_data
+            "GET", HYPERNODE_API_WHITELIST_ENDPOINT.format(
+                app_name), filter_data
         )
 
     def get_current_product_for_app(self, app_name):
@@ -588,7 +592,8 @@ class HypernodeAPIPython:
         """
         return self.requests(
             "GET",
-            HYPERNODE_API_APP_XGRADE_CHECK_ENDPOINT.format(app_name, product_code),
+            HYPERNODE_API_APP_XGRADE_CHECK_ENDPOINT.format(
+                app_name, product_code),
         )
 
     def xgrade(self, app_name, data):
@@ -630,6 +635,72 @@ class HypernodeAPIPython:
         :return obj response: The request response object
         """
         return self.requests("POST", HYPERNODE_API_APP_ORDER_ENDPOINT, data=data)
+
+    def get_brancher_year_history(self, app_name):
+        """
+        Retrieves the year history of destroyed brancher nodes for the specified Hypernode app.
+        Example:
+        >    client.get_brancher_year_history("yourhypernodeappname").json()
+        >    {
+        >        "years": [
+        >            {
+        >                "year": 2022,
+        >                "months": [
+        >                 { "month": 1,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 2,  "total_time": 600, "total_cost": 10 },
+        >                 { "month": 3,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 4,  "total_time": 200, "total_cost": 20 },
+        >                 { "month": 5,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 6,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 7,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 8,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 9,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 10, "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 11, "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 12, "total_time": 0,   "total_cost": 0 }
+        >            }
+        >        ]
+        >    }
+
+        :param str app_name: The name of the Hypernode to get your active branchers for
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "GET", HYPERNODE_API_BRANCHER_APP_YEAR_HISTORY_ENDPOINT.format(app_name)
+        )
+
+    def get_brancher_month_history(self, app_name, year_name, month_name):
+        """
+        Retrieves the month history of destroyed brancher nodes for the specified Hypernode app, year and month.
+        Example:
+        >    client.get_brancher_month_history("yourhypernodeappname", 2022, 12).json()
+        >    {
+        >        "years": [
+        >            {
+        >                "year": 2022,
+        >                "months": [
+        >                 { "month": 1,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 2,  "total_time": 600, "total_cost": 10 },
+        >                 { "month": 3,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 4,  "total_time": 200, "total_cost": 20 },
+        >                 { "month": 5,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 6,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 7,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 8,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 9,  "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 10, "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 11, "total_time": 0,   "total_cost": 0 },
+        >                 { "month": 12, "total_time": 0,   "total_cost": 0 }
+        >            }
+        >        ]
+        >    }
+
+        :param str app_name: The name of the Hypernode to get your active branchers for
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "GET", HYPERNODE_API_BRANCHER_APP_MONTH_HISTORY_ENDPOINT.format(app_name, year_name, month_name)
+        )
 
     def get_active_branchers(self, app_name):
         """
