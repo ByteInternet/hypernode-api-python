@@ -16,7 +16,7 @@ class TestGetAppFlavor(TestCase):
     def test_app_flavor_endpoint_is_correct(self):
         self.assertEqual("/v2/app/{}/flavor/", HYPERNODE_API_APP_FLAVOR_ENDPOINT)
 
-    def test_calls_app_flavor_endpoint_propertly(self):
+    def test_calls_app_flavor_endpoint_properly(self):
         self.client.get_app_flavor("my_app")
 
         self.mock_request.assert_called_once_with("GET", "/v2/app/my_app/flavor/")
