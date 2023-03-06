@@ -10,19 +10,20 @@ HYPERNODE_API_APP_DETAIL_WITH_ADDONS_ENDPOINT = "/v2/app/{}/with_addons?destroye
 HYPERNODE_API_APP_EAV_DESCRIPTION_ENDPOINT = "/v2/app/eav_descriptions/"
 HYPERNODE_API_APP_FLAVOR_ENDPOINT = "/v2/app/{}/flavor/"
 HYPERNODE_API_APP_FLOWS_ENDPOINT = "/logbook/v1/logbooks/{}/flows"
-HYPERNODE_API_BRANCHER_APP_ENDPOINT = "/v2/brancher/app/{}/"
-HYPERNODE_API_BRANCHER_ENDPOINT = "/v2/brancher/{}/"
 HYPERNODE_API_APP_NEXT_BEST_PLAN_ENDPOINT = "/v2/app/{}/next_best_plan/"
+HYPERNODE_API_APP_ORDER_ENDPOINT = "/v2/app/order/"
 HYPERNODE_API_APP_PRODUCT_LIST_ENDPOINT = "/v2/product/app/{}/"
 HYPERNODE_API_APP_XGRADE_CHECK_ENDPOINT = "/v2/app/xgrade/{}/check/{}/"
 HYPERNODE_API_APP_XGRADE_ENDPOINT = "/v2/app/xgrade/{}/"
 HYPERNODE_API_BACKUPS_ENDPOINT = "/v2/app/{}/backup/"
+HYPERNODE_API_BLOCK_ATTACK_DESCRIPTION_ENDPOINT = "/v2/app/block_attack_descriptions/"
+HYPERNODE_API_BRANCHER_APP_ENDPOINT = "/v2/brancher/app/{}/"
+HYPERNODE_API_BRANCHER_ENDPOINT = "/v2/brancher/{}/"
 HYPERNODE_API_PRODUCT_APP_DETAIL_ENDPOINT = "/v2/product/app/{}/current/"
 HYPERNODE_API_PRODUCT_LIST_ENDPOINT = "/v2/product/"
 HYPERNODE_API_PRODUCT_PRICE_DETAIL_ENDPOINT = "/v2/product/{}/with_price/"
 HYPERNODE_API_VALIDATE_APP_NAME_ENDPOINT = "/v2/app/name/validate/"
 HYPERNODE_API_WHITELIST_ENDPOINT = "/v2/whitelist/{}/"
-HYPERNODE_API_APP_ORDER_ENDPOINT = "/v2/app/order/"
 
 
 class HypernodeAPIPython:
@@ -403,6 +404,22 @@ class HypernodeAPIPython:
         if response.status_code == 404:
             raise error_to_raise
         return response
+
+    def get_block_attack_descriptions(self):
+        """
+        Get the block attack descriptions. These can be used to block attacks
+        by automatically placing an NGINX snippet in /data/web/nginx if the
+        specified block is compatible with the current NGINX configuration.
+        Example:
+        >    client.requests("GET", "/v2/app/block_attack_descriptions/").json()
+        >    {
+        >        'BlockSqliBruteForce': 'Attempts to deploy NGINX rules to block suspected (blind) SQL injection attack',
+        >        ...
+        >    }
+
+        :return obj response: The request response object
+        """
+        return self.requests("GET", HYPERNODE_API_BLOCK_ATTACK_DESCRIPTION_ENDPOINT)
 
     def get_whitelist_options(self, app_name):
         """
