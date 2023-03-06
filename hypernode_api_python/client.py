@@ -9,6 +9,7 @@ HYPERNODE_API_APP_DETAIL_ENDPOINT = "/v2/app/{}/?destroyed=false"
 HYPERNODE_API_APP_DETAIL_WITH_ADDONS_ENDPOINT = "/v2/app/{}/with_addons?destroyed=false"
 HYPERNODE_API_APP_EAV_DESCRIPTION_ENDPOINT = "/v2/app/eav_descriptions/"
 HYPERNODE_API_APP_FLAVOR_ENDPOINT = "/v2/app/{}/flavor/"
+HYPERNODE_API_APP_FLOWS_ENDPOINT = "/logbook/v1/logbooks/{}/flows"
 HYPERNODE_API_BRANCHER_APP_ENDPOINT = "/v2/brancher/app/{}/"
 HYPERNODE_API_BRANCHER_ENDPOINT = "/v2/brancher/{}/"
 HYPERNODE_API_APP_NEXT_BEST_PLAN_ENDPOINT = "/v2/app/{}/next_best_plan/"
@@ -168,6 +169,88 @@ class HypernodeAPIPython:
         :return obj response: The request response object
         """
         return self.requests("GET", HYPERNODE_API_APP_FLAVOR_ENDPOINT.format(app_name))
+
+    def get_flows(self, app_name):
+        """
+        List the flows for an app. Take note that this result is paginated and will not
+        retrieve all flows. If you are looking to retrieve all flows and not those available
+        on just the first page, look at the get_all_flows method instead.
+
+        Example:
+        >    client.get_flows('yourhypernodeappname').json()
+        >    {'count': 2,
+        >     'next': None,
+        >     'previous': None,
+        >     'results': [{'uuid': '1d1b8437-c8c0-4e96-a28a-26cc311c1f4c',
+        >       'state': 'success',
+        >       'name': 'update_node',
+        >       'created_at': '2023-03-04T14:42:24Z',
+        >       'updated_at': '2023-03-04T14:42:57Z',
+        >       'progress': {'running': [], 'total': 8, 'completed': 8},
+        >       'logbook': 'yourhypernodeappname',
+        >       'tracker': {'uuid': '6012bf2c-952d-4cb0-97ff-1022614b50b7',
+        >        'description': None}},
+        >      {'uuid': 'fe696417-024e-4a57-8442-4967f6df24a3',
+        >       'state': 'success',
+        >       'name': 'create_backup',
+        >       'created_at': '2023-03-04T14:13:00Z',
+        >       'updated_at': '2023-03-04T14:13:12Z',
+        >       'progress': {'running': [], 'total': 2, 'completed': 2},
+        >       'logbook': 'yourhypernodeappname',
+        >       'tracker': {'uuid': None, 'description': None}}]
+        >    }
+
+
+        :param str app_name: The name of the app to get the flows for
+        :return obj response: The request response object
+        """
+        return self.requests("GET", HYPERNODE_API_APP_FLOWS_ENDPOINT.format(app_name))
+
+    def get_all_flows(self, app_name, limit=None):
+        """
+        List all the flows for an app (paginate over the results), or
+        retrieve results until we have enough (if limit is specified).
+        Note that this method does not return a response object but a
+        list of dicts instead.
+        Example:
+        >    client.get_all_flows('yourhypernodeappname')
+        >    [{'uuid': '03bd6e10-5493-4ee8-92fc-cc429faebead',
+        >      'state': None,
+        >      'name': 'update_node',
+        >      'created_at': '2023-03-05T14:01:56Z',
+        >      'updated_at': None,
+        >      'progress': {'running': [], 'total': 0, 'completed': 0},
+        >      'logbook': 'yourhypernodeappname',
+        >      'tracker': {'uuid': '0dd83d83-6b9b-4fb5-9665-79fcf8235069',
+        >       'description': None}},
+        >     {'uuid': 'ace36ab9-323e-4a95-a0c6-46f96945b623',
+        >      'state': None,
+        >      'name': 'update_node',
+        >      'created_at': '2023-03-05T14:01:55Z',
+        >      'updated_at': None,
+        >      'progress': {'running': [], 'total': 0, 'completed': 0},
+        >      'logbook': 'yourhypernodeappname',
+        >      'tracker': {'uuid': '0006206e-df48-4af4-8e7b-b3db86d35bb0',
+        >       'description': None}},
+        >     ...
+        >    ]
+
+        :param str app_name: The name of the app to get all the flows for
+        :param int limit: How many flows to get. If None is specified all
+        available flows will be retrieved.
+        :return list flows: A list of all flows
+        """
+        flows = []
+        next_url = HYPERNODE_API_APP_FLOWS_ENDPOINT.format(app_name)
+        while next_url:
+            if limit and len(flows) >= limit:
+                break
+            response = self.requests("GET", next_url.replace(HYPERNODE_API_URL, ""))
+            response_data = response.json()
+            results = response_data["results"]
+            flows.extend(results)
+            next_url = response_data["next"]
+        return flows[:limit]
 
     def get_slas(self):
         """
