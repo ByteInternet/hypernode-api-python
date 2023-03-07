@@ -16,6 +16,7 @@ HYPERNODE_API_APP_PRODUCT_LIST_ENDPOINT = "/v2/product/app/{}/"
 HYPERNODE_API_APP_XGRADE_CHECK_ENDPOINT = "/v2/app/xgrade/{}/check/{}/"
 HYPERNODE_API_APP_XGRADE_ENDPOINT = "/v2/app/xgrade/{}/"
 HYPERNODE_API_BACKUPS_ENDPOINT = "/v2/app/{}/backup/"
+HYPERNODE_API_BLOCK_ATTACK_ENDPOINT = "/v2/app/{}/block_attack/"
 HYPERNODE_API_BLOCK_ATTACK_DESCRIPTION_ENDPOINT = "/v2/app/block_attack_descriptions/"
 HYPERNODE_API_BRANCHER_APP_ENDPOINT = "/v2/brancher/app/{}/"
 HYPERNODE_API_BRANCHER_ENDPOINT = "/v2/brancher/{}/"
@@ -411,7 +412,7 @@ class HypernodeAPIPython:
         by automatically placing an NGINX snippet in /data/web/nginx if the
         specified block is compatible with the current NGINX configuration.
         Example:
-        >    client.requests("GET", "/v2/app/block_attack_descriptions/").json()
+        >    client.get_block_attack_descriptions().json()
         >    {
         >        'BlockSqliBruteForce': 'Attempts to deploy NGINX rules to block suspected (blind) SQL injection attack',
         >        ...
@@ -420,6 +421,27 @@ class HypernodeAPIPython:
         :return obj response: The request response object
         """
         return self.requests("GET", HYPERNODE_API_BLOCK_ATTACK_DESCRIPTION_ENDPOINT)
+
+    def block_attack(self, app_name, attack_name):
+        """
+        Attempts to deploy one of the block attack rules. The list of rules can be retrieved with the
+        get_block_attack_descriptions method. This will place an NGINX snippet to block the specified attack
+        in /data/web/nginx. If the nginx-config-validator detects that the new config is valid, it will leave
+        the newly placed config. Otherwise it will be removed again.
+
+        Example:
+        >    client.block_attack('yourhypernodeappname', 'BlockSqliBruteForce').ok
+        >    True
+
+        :param str app_name: The name of the Hypernode you want to deploy the block attack nginx configuration on
+        :param str attack_name: The specific attack you want to block. See get_block_attack_descriptions for options.
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "POST",
+            HYPERNODE_API_BLOCK_ATTACK_ENDPOINT.format(app_name),
+            data={"attack_name": attack_name},
+        )
 
     def get_whitelist_options(self, app_name):
         """
