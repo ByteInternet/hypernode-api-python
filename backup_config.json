@@ -1,0 +1,37 @@
+{
+    "ssh": {
+        "host": "example.com",
+        "port": 22,
+        "user": "username",
+        "location": "/path/on/remote/server"
+    },
+    "local": {
+        "source_folder": "/path/to/source/folder", 
+        "backup_folder": "/path/to/store/backups"
+    },
+    "mysql": {
+        "host": "db.example.com",
+        "user": "dbuser",
+        "password": "dbpassword",
+        "database": "dbname"
+    },
+    "schedule": {
+        "daily": [3, 8, 13, 22],
+        "weekly": {
+            "weekday": 4, 
+            "hour": 17
+        },
+        "monthly": {
+            "weekday": 0,
+            "day_range": [1, 7], 
+            "hour": 17
+        }
+    },
+    "retention": {
+        "daily": 4,
+        "weekly": 30,
+        "monthly": 3
+    },
+    "disable_local_save": false,
+    "disable_ssh_ftp": false
+}
