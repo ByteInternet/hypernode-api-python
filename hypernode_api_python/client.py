@@ -5,6 +5,7 @@ HYPERNODE_API_URL = "https://api.hypernode.com"
 HYPERNODE_API_ADDON_SLA_LIST_ENDPOINT = "/v2/addon/slas/"
 HYPERNODE_API_APP_CHECK_PAYMENT_INFORMATION = "/v2/app/{}/check-payment-information/"
 HYPERNODE_API_APP_CONFIGURATION_ENDPOINT = "/v2/configuration/"
+HYPERNODE_API_APP_CLUSTER_RELATIONS = "/v2/app/{}/relations/"
 HYPERNODE_API_APP_DETAIL_ENDPOINT = "/v2/app/{}/?destroyed=false"
 HYPERNODE_API_APP_DETAIL_WITH_ADDONS_ENDPOINT = "/v2/app/{}/with_addons?destroyed=false"
 HYPERNODE_API_APP_EAV_DESCRIPTION_ENDPOINT = "/v2/app/eav_descriptions/"
@@ -364,6 +365,34 @@ class HypernodeAPIPython:
         :return obj response: The request response object
         """
         return self.requests("GET", HYPERNODE_API_APP_CONFIGURATION_ENDPOINT)
+
+    def get_cluster_relations(self, app_name):
+        """ "
+        List all relations for the specified app. This will return all the
+        relations that are currently configured for the specified app.
+
+        Example:
+        >    client.get_cluster_relations('mytestappweb').json()
+        >    {'children': [],
+        >     'parents': [{'child': 'mytestappweb',
+        >                  'cluster_description': None,
+        >                  'id': 182,
+        >                  'parent': 'mytestappdb',
+        >                  'relation_type': 'mysql'},
+        >                 {'child': 'mytestappweb',
+        >                  'cluster_description': None,
+        >                  'id': 180,
+        >                  'parent': 'mytestapp',
+        >                  'relation_type': 'loadbalancer'},
+        >                 {'child': 'mytestappweb',
+        >                  'cluster_description': None,
+        >                  'id': 181,
+        >                  'parent': 'mytestapp',
+        >                  'relation_type': 'nfs'}]}
+        """
+        return self.requests(
+            "GET", HYPERNODE_API_APP_CLUSTER_RELATIONS.format(app_name)
+        )
 
     def get_product_info_with_price(self, product_code, error_to_raise=None):
         """
