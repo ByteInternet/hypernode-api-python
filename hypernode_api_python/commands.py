@@ -477,3 +477,34 @@ $ ./bin/get_whitelist_rules
     client = get_client()
     app_name = get_app_name()
     print_response(client.get_whitelist_rules(app_name))
+
+
+def get_current_product_for_app(args=None):
+    parser = ArgumentParser(
+        description="""
+Gets the current product for the specified app.
+
+Example:
+$ ./bin/get_current_product_for_app
+{
+  "code": "FALCON_M_202203",
+  "name": "Falcon M",
+  "backups_enabled": true,
+  "is_development": false,
+  "varnish_supported": true,
+  "supports_sla": true,
+  "provider_flavors": [
+    {
+      "vcpus": 3,
+      "ram_in_mb": 16384,
+      ...
+    },
+    ...
+}
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    print_response(client.get_current_product_for_app(app_name))

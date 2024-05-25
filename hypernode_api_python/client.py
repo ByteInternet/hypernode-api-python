@@ -580,7 +580,6 @@ class HypernodeAPIPython:
             "GET", HYPERNODE_API_WHITELIST_ENDPOINT.format(app_name), filter_data
         )
 
-    # TODO: add entrypoint for this method in bin/ and commands.py
     def get_current_product_for_app(self, app_name):
         """
         Retrieve information about the product the specified App is currently on.
