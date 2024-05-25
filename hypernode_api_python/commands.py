@@ -553,3 +553,30 @@ $ ./bin/get_active_products
     parser.parse_args(args=args)
     client = get_client()
     print_response(client.get_active_products())
+
+
+def check_xgrade(args=None):
+    parser = ArgumentParser(
+        description="""
+Verify that the specified app can be upgraded to the specified product.
+This checks if there is enough disk space available. The output will also
+show whether or not there will be an IP change and if a volume swap xgrade
+would be performed instead of an rsync xgrade.
+
+Example:
+$ ./bin/check_xgrade FALCON_L_202203
+{
+  "has_valid_vat_number": true,
+  "has_valid_payment_method": true,
+  "will_change_ip": false,
+  "will_do_volswap": false,
+  "will_disk_fit": true
+}
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument("product_code", help="The code of the product to check")
+    args = parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    print_response(client.check_xgrade(app_name, args.product_code))
