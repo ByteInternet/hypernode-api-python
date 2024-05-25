@@ -508,3 +508,48 @@ $ ./bin/get_current_product_for_app
     client = get_client()
     app_name = get_app_name()
     print_response(client.get_current_product_for_app(app_name))
+
+
+def check_payment_information_for_app(args=None):
+    parser = ArgumentParser(
+        description="""
+Shows the payment information for the specified app.
+
+Example:
+$ ./bin/check_payment_information_for_app
+{
+  "has_valid_vat_number": true,
+  "has_valid_payment_method": true
+}
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    print_response(client.check_payment_information_for_app(app_name))
+
+
+def get_active_products(args=None):
+    parser = ArgumentParser(
+        description="""
+Lists all available products.
+
+Example:
+$ ./bin/get_active_products
+[
+  {
+    "code": "JACKAL_S_202301",
+    "name": "Jackal S",
+    "backups_enabled": true,
+    "is_development": false,
+    ...
+  },
+  ...
+]
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.parse_args(args=args)
+    client = get_client()
+    print_response(client.get_active_products())

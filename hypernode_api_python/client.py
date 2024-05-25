@@ -648,7 +648,6 @@ class HypernodeAPIPython:
             "GET", HYPERNODE_API_PRODUCT_APP_DETAIL_ENDPOINT.format(app_name)
         )
 
-    # TODO: add entrypoint for this method in bin/ and commands.py
     def check_payment_information_for_app(self, app_name):
         """
         Get the payment information that is currently configured for this Hypernode
@@ -666,7 +665,6 @@ class HypernodeAPIPython:
             "GET", HYPERNODE_API_APP_CHECK_PAYMENT_INFORMATION.format(app_name)
         )
 
-    # TODO: add entrypoint for this method in bin/ and commands.py
     def get_active_products(self):
         """
         Retrieve the list of products that are currently available. You can
