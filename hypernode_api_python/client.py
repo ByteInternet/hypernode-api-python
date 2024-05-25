@@ -2,6 +2,7 @@ from requests import Session
 
 DEFAULT_USER_AGENT = "hypernode-api-python"
 HYPERNODE_API_URL = "https://api.hypernode.com"
+HYPERNODE_API_ADDON_LIST_ENDPOINT = "/v2/addon/"
 HYPERNODE_API_ADDON_SLA_LIST_ENDPOINT = "/v2/addon/slas/"
 HYPERNODE_API_APP_CHECK_PAYMENT_INFORMATION = "/v2/app/{}/check-payment-information/"
 HYPERNODE_API_APP_CONFIGURATION_ENDPOINT = "/v2/configuration/"
@@ -271,6 +272,22 @@ class HypernodeAPIPython:
         :return obj response: The request response object
         """
         return self.requests("GET", HYPERNODE_API_ADDON_SLA_LIST_ENDPOINT)
+
+    def get_sla(self, sla_code):
+        """
+        List a specific SLA
+        Example:
+        >    client.get_sla("sla-standard").json()
+        >    {'billing_period': 1,
+        >     'billing_period_unit': 'month',
+        >     'code': 'sla-standard',
+        >     'id': 123,
+        >     'name': 'SLA Standard',
+        >     'price': 1234}
+
+        :return obj response: The request response object
+        """
+        return self.requests("GET", HYPERNODE_API_ADDON_LIST_ENDPOINT + sla_code + "/")
 
     def get_available_backups_for_app(self, app_name):
         """
