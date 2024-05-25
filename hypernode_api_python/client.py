@@ -732,7 +732,6 @@ class HypernodeAPIPython:
         """
         return self.requests("GET", HYPERNODE_API_PRODUCT_LIST_ENDPOINT)
 
-    # TODO: add entrypoint for this method in bin/ and commands.py
     def check_xgrade(self, app_name, product_code):
         """
         Checks if the Hypernode 'is going to fit' on the new product. Retrieves some
@@ -802,7 +801,6 @@ class HypernodeAPIPython:
         """
         return self.requests("POST", HYPERNODE_API_APP_ORDER_ENDPOINT, data=data)
 
-    # TODO: add entrypoint for this method in bin/ and commands.py
     def get_active_branchers(self, app_name):
         """
         List all active brancher nodes of your Hypernode.

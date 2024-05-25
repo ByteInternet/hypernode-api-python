@@ -618,3 +618,26 @@ The job to xgrade Hypernode 'yourappname' to product 'FALCON_L_202203' has been 
             "The job to xgrade Hypernode '{}' to product '{}' "
             "has been posted".format(app_name, args.product_code)
         )
+
+
+def get_active_branchers(args=None):
+    parser = ArgumentParser(
+        description="""
+List all active branchers
+
+Example:
+$ ./bin/get_active_branchers
+{
+  "monthly_total_time": 0,
+  "total_minutes_elapsed": 0,
+  "actual_monthly_total_cost": 0,
+  "monthly_total_cost": 0,
+  "branchers": []
+}
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    print_response(client.get_active_branchers(app_name))
