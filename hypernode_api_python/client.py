@@ -331,6 +331,7 @@ class HypernodeAPIPython:
         """
         return self.requests("GET", HYPERNODE_API_APP_EAV_DESCRIPTION_ENDPOINT)
 
+    # TODO: add entrypoint for this method in bin/ and commands.py
     def set_app_setting(self, app_name, attribute, value):
         """
         Update a setting on the app, like the PHP or MySQL version. See
@@ -384,7 +385,7 @@ class HypernodeAPIPython:
         return self.requests("GET", HYPERNODE_API_APP_CONFIGURATION_ENDPOINT)
 
     def get_cluster_relations(self, app_name):
-        """ "
+        """
         List all relations for the specified app. This will return all the
         relations that are currently configured for the specified app.
 
@@ -579,6 +580,7 @@ class HypernodeAPIPython:
             "GET", HYPERNODE_API_WHITELIST_ENDPOINT.format(app_name), filter_data
         )
 
+    # TODO: add entrypoint for this method in bin/ and commands.py
     def get_current_product_for_app(self, app_name):
         """
         Retrieve information about the product the specified App is currently on.
@@ -647,6 +649,7 @@ class HypernodeAPIPython:
             "GET", HYPERNODE_API_PRODUCT_APP_DETAIL_ENDPOINT.format(app_name)
         )
 
+    # TODO: add entrypoint for this method in bin/ and commands.py
     def check_payment_information_for_app(self, app_name):
         """
         Get the payment information that is currently configured for this Hypernode
@@ -664,6 +667,7 @@ class HypernodeAPIPython:
             "GET", HYPERNODE_API_APP_CHECK_PAYMENT_INFORMATION.format(app_name)
         )
 
+    # TODO: add entrypoint for this method in bin/ and commands.py
     def get_active_products(self):
         """
         Retrieve the list of products that are currently available. You can
@@ -731,6 +735,7 @@ class HypernodeAPIPython:
         """
         return self.requests("GET", HYPERNODE_API_PRODUCT_LIST_ENDPOINT)
 
+    # TODO: add entrypoint for this method in bin/ and commands.py
     def check_xgrade(self, app_name, product_code):
         """
         Checks if the Hypernode 'is going to fit' on the new product. Retrieves some
@@ -759,6 +764,7 @@ class HypernodeAPIPython:
             HYPERNODE_API_APP_XGRADE_CHECK_ENDPOINT.format(app_name, product_code),
         )
 
+    # TODO: add entrypoint for this method in bin/ and commands.py
     def xgrade(self, app_name, data):
         """
         Change the product of a Hypernode to a different plan. This will initiate
@@ -780,6 +786,7 @@ class HypernodeAPIPython:
             "PATCH", HYPERNODE_API_APP_XGRADE_ENDPOINT.format(app_name), data=data
         )
 
+    # TODO: add entrypoint for this method in bin/ and commands.py
     def order_hypernode(self, data):
         """
         Orders a new Hypernode. Note that you can not do this with the API permissions
@@ -799,6 +806,7 @@ class HypernodeAPIPython:
         """
         return self.requests("POST", HYPERNODE_API_APP_ORDER_ENDPOINT, data=data)
 
+    # TODO: add entrypoint for this method in bin/ and commands.py
     def get_active_branchers(self, app_name):
         """
         List all active brancher nodes of your Hypernode.
@@ -838,6 +846,7 @@ class HypernodeAPIPython:
             "GET", HYPERNODE_API_BRANCHER_APP_ENDPOINT.format(app_name)
         )
 
+    # TODO: add entrypoint for this method in bin/ and commands.py
     def create_brancher(self, app_name, data):
         """
         Create a new branch (server replica) of your Hypernode.
@@ -851,6 +860,7 @@ class HypernodeAPIPython:
             "POST", HYPERNODE_API_BRANCHER_APP_ENDPOINT.format(app_name), data=data
         )
 
+    # TODO: add entrypoint for this method in bin/ and commands.py
     def destroy_brancher(self, brancher_name):
         """
         Destroy an existing brancher node of your Hypernode.

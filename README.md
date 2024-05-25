@@ -18,6 +18,36 @@ pip install -r requirements/development.txt
 
 Each Hypernode has an API token associated with it, you can use that to talk to the API directly. You can find the token in `/etc/hypernode/hypernode_api_token`. For API tokens with special permissions please contact support@hypernode.com. Not all functionality in the API is currently generally available but if you'd like to start automating and have an interesting use-case we'd love to hear from you.
 
+## Using the library from the commandline
+
+In the `bin/` directory you'll find entry points to interact with the API directly from the commandline.
+
+See for example:
+```bash
+$ export PYTHONPATH=.
+
+$ ./bin/get_slas --help
+usage: get_slas [-h]
+
+List all available SLAs.
+
+Example:
+$ ./bin/get_slas
+[
+  {
+    "id": 123,
+    "code": "sla-standard",
+    "name": "SLA Standard",
+    "price": 1234,
+    "billing_period": 1,
+    "billing_period_unit": "month"
+  },
+  ...
+]
+
+optional arguments:
+  -h, --help  show this help message and exit
+```
 
 ### Installing the library in your project
 
@@ -56,7 +86,7 @@ client.set_app_setting('yourhypernodeappname', 'php_version', '8.1').json()
 {'name': 'yourhypernodeappname', 'type': 'persistent', 'php_version': '8.1', ...}
 ```
 
-To even performing acts of cloud automation, like scaling to the first next larger plan:
+You can even perform acts of cloud automation, like scaling to the first next larger plan:
 ```python
 client.xgrade(
     'yourhypernodeappname',
