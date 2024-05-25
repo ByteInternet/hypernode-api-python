@@ -761,7 +761,6 @@ class HypernodeAPIPython:
             HYPERNODE_API_APP_XGRADE_CHECK_ENDPOINT.format(app_name, product_code),
         )
 
-    # TODO: add entrypoint for this method in bin/ and commands.py
     def xgrade(self, app_name, data):
         """
         Change the product of a Hypernode to a different plan. This will initiate

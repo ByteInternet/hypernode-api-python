@@ -588,3 +588,33 @@ $ ./bin/check_xgrade FALCON_L_202203
     args = parser.parse_args(args=args)
     app_name = get_app_name()
     print_response(client.check_xgrade(app_name, args.product_code))
+
+
+def xgrade(args=None):
+    parser = ArgumentParser(
+        description="""
+Change the plan of your Hypernode.
+
+Example:
+$ ./bin/xgrade FALCON_L_202203
+The job to xgrade Hypernode 'yourappname' to product 'FALCON_L_202203' has been posted
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    client = get_client()
+    parser.add_argument(
+        "product_code",
+        help="The code of the product to check",
+        choices=[p["code"] for p in client.get_active_products().json()],
+    )
+    args = parser.parse_args(args=args)
+    app_name = get_app_name()
+    data = {"product": args.product_code}
+    output = client.xgrade(app_name, data=data).content
+    if output:
+        print(output)
+    else:
+        print(
+            "The job to xgrade Hypernode '{}' to product '{}' "
+            "has been posted".format(app_name, args.product_code)
+        )
