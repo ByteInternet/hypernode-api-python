@@ -379,9 +379,13 @@ $ ./bin/get_product_info FALCON_S_202203
 """,
         formatter_class=RawTextHelpFormatter,
     )
-    parser.add_argument("product_code", help="The code of the product to get")
-    args = parser.parse_args(args=args)
     client = get_client()
+    parser.add_argument(
+        "product_code",
+        help="The code of the product to get",
+        choices=[p["code"] for p in client.get_active_products().json()],
+    )
+    args = parser.parse_args(args=args)
     print_response(client.get_product_info_with_price(args.product_code))
 
 
@@ -575,8 +579,12 @@ $ ./bin/check_xgrade FALCON_L_202203
 """,
         formatter_class=RawTextHelpFormatter,
     )
-    parser.add_argument("product_code", help="The code of the product to check")
-    args = parser.parse_args(args=args)
     client = get_client()
+    parser.add_argument(
+        "product_code",
+        help="The code of the product to check",
+        choices=[p["code"] for p in client.get_active_products().json()],
+    )
+    args = parser.parse_args(args=args)
     app_name = get_app_name()
     print_response(client.check_xgrade(app_name, args.product_code))

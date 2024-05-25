@@ -13,6 +13,14 @@ class TestCheckXgrade(TestCase):
             "hypernode_api_python.commands.get_app_name"
         )
         self.get_app_name.return_value = "myappname"
+        self.client.get_active_products.return_value.json.return_value = [
+            {
+                "code": "FALCON_S_202203",
+            },
+            {
+                "code": "JACKAL_M_202201",
+            },
+        ]
 
     def test_check_xgrade_gets_client(self):
         check_xgrade(["FALCON_S_202203"])
@@ -35,3 +43,7 @@ class TestCheckXgrade(TestCase):
         self.print_response.assert_called_once_with(
             self.client.check_xgrade.return_value
         )
+
+    def test_check_xgrade_raises_if_product_not_found(self):
+        with self.assertRaises(SystemExit):
+            check_xgrade(["ProductThatDoesNotExist"])
