@@ -641,3 +641,63 @@ $ ./bin/get_active_branchers
     client = get_client()
     app_name = get_app_name()
     print_response(client.get_active_branchers(app_name))
+
+
+def create_brancher(args=None):
+    parser = ArgumentParser(
+        description="""
+Create a Brancher Hypernode from the specified app.
+Outputs the app_info of the brancher to be created..
+
+Example:
+$ ./bin/create_brancher
+{
+  "name": "yourappname-ephoj82yb",
+  "parent": "yourappname",
+  "type": "brancher",
+  "product": "FALCON_M_202203",
+  "domainname": "yourappname-ephoj82yb.hypernode.io",
+  ...
+}
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    data = {}
+    print_response(client.create_brancher(app_name, data=data))
+
+
+def destroy_brancher(args=None):
+    parser = ArgumentParser(
+        description="""
+Destroy a Brancher Hypernode.
+
+Examples:
+$ ./bin/destroy_brancher yourbrancherappname-eph12345
+A job has been posted to cancel the 'yourbrancherappname-eph12345' brancher app.
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        "brancher_app_name",
+        help="The name of the brancher to destroy. See ./bin/get_active_branchers",
+    )
+    args = parser.parse_args(args=args)
+    client = get_client()
+    try:
+        client.destroy_brancher(args.brancher_app_name)
+        print(
+            "A job has been posted to cancel the '{}' brancher app.".format(
+                args.brancher_app_name
+            )
+        )
+        exit(EX_OK)
+    except Exception as e:
+        print(
+            "Brancher app '{}' failed to be cancelled: {}".format(
+                args.brancher_app_name, e
+            )
+        )
+        exit(EX_UNAVAILABLE)

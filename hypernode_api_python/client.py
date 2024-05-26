@@ -840,7 +840,6 @@ class HypernodeAPIPython:
             "GET", HYPERNODE_API_BRANCHER_APP_ENDPOINT.format(app_name)
         )
 
-    # TODO: add entrypoint for this method in bin/ and commands.py
     def create_brancher(self, app_name, data):
         """
         Create a new branch (server replica) of your Hypernode.
@@ -854,7 +853,6 @@ class HypernodeAPIPython:
             "POST", HYPERNODE_API_BRANCHER_APP_ENDPOINT.format(app_name), data=data
         )
 
-    # TODO: add entrypoint for this method in bin/ and commands.py
     def destroy_brancher(self, brancher_name):
         """
         Destroy an existing brancher node of your Hypernode.
