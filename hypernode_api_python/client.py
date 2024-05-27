@@ -331,6 +331,7 @@ class HypernodeAPIPython:
         """
         return self.requests("GET", HYPERNODE_API_APP_EAV_DESCRIPTION_ENDPOINT)
 
+    # TODO: add entrypoint for this method in bin/ and commands.py
     def set_app_setting(self, app_name, attribute, value):
         """
         Update a setting on the app, like the PHP or MySQL version. See
@@ -384,7 +385,7 @@ class HypernodeAPIPython:
         return self.requests("GET", HYPERNODE_API_APP_CONFIGURATION_ENDPOINT)
 
     def get_cluster_relations(self, app_name):
-        """ "
+        """
         List all relations for the specified app. This will return all the
         relations that are currently configured for the specified app.
 
@@ -780,6 +781,7 @@ class HypernodeAPIPython:
             "PATCH", HYPERNODE_API_APP_XGRADE_ENDPOINT.format(app_name), data=data
         )
 
+    # TODO: add entrypoint for this method in bin/ and commands.py
     def order_hypernode(self, data):
         """
         Orders a new Hypernode. Note that you can not do this with the API permissions
