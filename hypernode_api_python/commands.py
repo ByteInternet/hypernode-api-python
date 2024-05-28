@@ -701,3 +701,24 @@ A job has been posted to cancel the 'yourbrancherappname-eph12345' brancher app.
             )
         )
         exit(EX_UNAVAILABLE)
+
+
+def get_fpm_status(args=None):
+    parser = ArgumentParser(
+        description="""
+Show the status of the PHP-FPM workers.
+
+Example:
+$ ./bin/get_fpm_status
+{
+  "message": null,
+  "data": "50570 IDLE   0.0s -  phpfpm    127.0.0.1       GET  magweb/status.php   (python-requests/2.28.1)\n50571 IDLE   0.0s -  phpfpm    127.0.0.1       GET  magweb/status.php   (python-requests/2.28.1)\n",
+  "status": 200
+}
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    print_response(client.get_fpm_status(app_name))
