@@ -21,6 +21,7 @@ HYPERNODE_API_BACKUPS_ENDPOINT = "/v2/app/{}/backup/"
 HYPERNODE_API_BLOCK_ATTACK_ENDPOINT = "/v2/app/{}/block_attack/"
 HYPERNODE_API_BLOCK_ATTACK_DESCRIPTION_ENDPOINT = "/v2/app/block_attack_descriptions/"
 HYPERNODE_API_BRANCHER_APP_ENDPOINT = "/v2/brancher/app/{}/"
+HYPERNODE_API_FPM_STATUS_APP_ENDPOINT = "/v2/nats/{}/hypernode.show-fpm-status"
 HYPERNODE_API_BRANCHER_ENDPOINT = "/v2/brancher/{}/"
 HYPERNODE_API_PRODUCT_APP_DETAIL_ENDPOINT = "/v2/product/app/{}/current/"
 HYPERNODE_API_PRODUCT_LIST_ENDPOINT = "/v2/product/"
@@ -838,6 +839,24 @@ class HypernodeAPIPython:
         """
         return self.requests(
             "GET", HYPERNODE_API_BRANCHER_APP_ENDPOINT.format(app_name)
+        )
+
+    def get_fpm_status(self, app_name):
+        """
+        Get the status of the FPM service for the specified app
+        Example:
+        >    client.get_fpm_status("yourhypernodeappname").json()
+        {
+          "message": null,
+          "data": "50570 IDLE   0.0s -  phpfpm    127.0.0.1       GET  magweb/status.php   (python-requests/2.28.1)\n50571 IDLE   0.0s -  phpfpm    127.0.0.1       GET  magweb/status.php   (python-requests/2.28.1)\n",
+          "status": 200
+        }
+
+        :param str app_name: The name of the Hypernode to get the FPM status for
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "POST", HYPERNODE_API_FPM_STATUS_APP_ENDPOINT.format(app_name)
         )
 
     def create_brancher(self, app_name, data):
