@@ -267,6 +267,24 @@ $ ./bin/get_available_backups_for_app
     print_response(client.get_available_backups_for_app(app_name))
 
 
+def create_backup(args=None):
+    parser = ArgumentParser(
+        description="""
+Create a new snapshot backup of the Hypernode. This requires
+sla-standard to be enabled on the Hypernode.
+
+Example:
+$ ./bin/create_backup
+"A job to create a backup has been posted"
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    print_response(client.create_backup(app_name))
+
+
 def get_eav_description(args=None):
     parser = ArgumentParser(
         description="""

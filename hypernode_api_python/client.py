@@ -315,6 +315,19 @@ class HypernodeAPIPython:
         """
         return self.requests("GET", HYPERNODE_API_BACKUPS_ENDPOINT.format(app_name))
 
+    def create_backup(self, app_name):
+        """
+        Create a new snapshot backup of the specified app. This requires
+        sla-standard to be enabled on the Hypernode.
+        Example:
+        >    client.create_backup('yourhypernodeappname').json()
+        >    'A job to create a backup has been posted'
+
+        :param str app_name: The app to create the backup for
+        :return obj response: The request response object
+        """
+        return self.requests("POST", HYPERNODE_API_BACKUPS_ENDPOINT.format(app_name))
+
     def get_app_eav_description(self):
         """
         List all the available EAV settings that are available. These are
