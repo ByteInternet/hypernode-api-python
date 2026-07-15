@@ -594,6 +594,36 @@ class HypernodeAPIPython:
             "GET", HYPERNODE_API_WHITELIST_ENDPOINT.format(app_name), filter_data
         )
 
+    def add_whitelist_rule(self, app_name, data):
+        """
+        Add a whitelist rule for the specified app. See get_whitelist_options
+        for the available options.
+        Example:
+        >    client.add_whitelist_rule(
+        >        'yourhypernodeappname',
+        >        data={'ip': '1.2.3.4', 'type': 'database', 'description': 'my description'}
+        >    ).json()
+        >    {
+        >        'id': 1234,
+        >        'created': '2024-05-25T13:39:48Z',
+        >        'domainname': 'yourhypernodeappname.hypernode.io',
+        >        'ip': '1.2.3.4',
+        >        'type': 'database',
+        >        'description': 'my description'
+        >    }
+
+        :param str app_name: The name of the Hypernode to add the whitelist
+        rule for
+        :param dict data: Data describing the whitelist rule to add. An
+        example could be: {'ip': '1.2.3.4', 'type': 'database'}. The type can
+        be one of 'waf', 'database' or 'ftp', and optionally a 'description'
+        can be specified.
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "POST", HYPERNODE_API_WHITELIST_ENDPOINT.format(app_name), data=data
+        )
+
     def get_current_product_for_app(self, app_name):
         """
         Retrieve information about the product the specified App is currently on.

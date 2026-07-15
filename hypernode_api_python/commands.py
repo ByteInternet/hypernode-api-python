@@ -501,6 +501,46 @@ $ ./bin/get_whitelist_rules
     print_response(client.get_whitelist_rules(app_name))
 
 
+def add_whitelist_rule(args=None):
+    parser = ArgumentParser(
+        description="""
+Add a WAF whitelist rule for the Hypernode.
+
+Example:
+$ ./bin/add_whitelist_rule 1.2.3.4 --type database --description "my description"
+{
+  "id": 1234,
+  "created": "2024-05-25T13:39:48Z",
+  "domainname": "yourhypernodeappname.hypernode.io",
+  "ip": "1.2.3.4",
+  "type": "database",
+  "description": "my description"
+}
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        "ip",
+        help="The IP address to whitelist",
+    )
+    parser.add_argument(
+        "--type",
+        help="The type of whitelist rule to add",
+        choices=["waf", "database", "ftp"],
+        default="database",
+    )
+    parser.add_argument(
+        "--description",
+        help="An optional description for the whitelist rule",
+        default="",
+    )
+    args = parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    data = {"ip": args.ip, "type": args.type, "description": args.description}
+    print_response(client.add_whitelist_rule(app_name, data=data))
+
+
 def get_current_product_for_app(args=None):
     parser = ArgumentParser(
         description="""
