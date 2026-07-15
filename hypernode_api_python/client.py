@@ -23,6 +23,8 @@ HYPERNODE_API_BLOCK_ATTACK_DESCRIPTION_ENDPOINT = "/v2/app/block_attack_descript
 HYPERNODE_API_BRANCHER_APP_ENDPOINT = "/v2/brancher/app/{}/"
 HYPERNODE_API_FPM_STATUS_APP_ENDPOINT = "/v2/nats/{}/hypernode.show-fpm-status"
 HYPERNODE_API_BRANCHER_ENDPOINT = "/v2/brancher/{}/"
+HYPERNODE_API_INSIGHTS_ANNOTATION_LIST_ENDPOINT = "/v2/insights-annotation/"
+HYPERNODE_API_INSIGHTS_ANNOTATION_CREATE_ENDPOINT = "/v2/insights-annotation/create/"
 HYPERNODE_API_PRODUCT_APP_DETAIL_ENDPOINT = "/v2/product/app/{}/current/"
 HYPERNODE_API_PRODUCT_LIST_ENDPOINT = "/v2/product/"
 HYPERNODE_API_PRODUCT_PRICE_DETAIL_ENDPOINT = "/v2/product/{}/with_price/"
@@ -315,6 +317,19 @@ class HypernodeAPIPython:
         """
         return self.requests("GET", HYPERNODE_API_BACKUPS_ENDPOINT.format(app_name))
 
+    def create_backup(self, app_name):
+        """
+        Create a new snapshot backup of the specified app. This requires
+        sla-standard to be enabled on the Hypernode.
+        Example:
+        >    client.create_backup('yourhypernodeappname').json()
+        >    'A job to create a backup has been posted'
+
+        :param str app_name: The app to create the backup for
+        :return obj response: The request response object
+        """
+        return self.requests("POST", HYPERNODE_API_BACKUPS_ENDPOINT.format(app_name))
+
     def get_app_eav_description(self):
         """
         List all the available EAV settings that are available. These are
@@ -579,6 +594,59 @@ class HypernodeAPIPython:
         filter_data = filter_data or {}
         return self.requests(
             "GET", HYPERNODE_API_WHITELIST_ENDPOINT.format(app_name), filter_data
+        )
+
+    def add_whitelist_rule(self, app_name, data):
+        """
+        Add a whitelist rule for the specified app. See get_whitelist_options
+        for the available options.
+        Example:
+        >    client.add_whitelist_rule(
+        >        'yourhypernodeappname',
+        >        data={'ip': '1.2.3.4', 'type': 'database', 'description': 'my description'}
+        >    ).json()
+        >    {
+        >        'id': 1234,
+        >        'created': '2024-05-25T13:39:48Z',
+        >        'domainname': 'yourhypernodeappname.hypernode.io',
+        >        'ip': '1.2.3.4',
+        >        'type': 'database',
+        >        'description': 'my description'
+        >    }
+
+        :param str app_name: The name of the Hypernode to add the whitelist
+        rule for
+        :param dict data: Data describing the whitelist rule to add. An
+        example could be: {'ip': '1.2.3.4', 'type': 'database'}. The type can
+        be one of 'waf', 'database' or 'ftp', and optionally a 'description'
+        can be specified.
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "POST", HYPERNODE_API_WHITELIST_ENDPOINT.format(app_name), data=data
+        )
+
+    def delete_whitelist_rule(self, app_name, data):
+        """
+        Remove a whitelist rule for the specified app. See get_whitelist_rules
+        for the currently configured whitelist rules. On success the response
+        will have status_code 204 and no content.
+        Example:
+        >    client.delete_whitelist_rule(
+        >        'yourhypernodeappname',
+        >        data={'ip': '1.2.3.4', 'type': 'database'}
+        >    ).status_code
+        >    204
+
+        :param str app_name: The name of the Hypernode to remove the whitelist
+        rule for
+        :param dict data: Data describing the whitelist rule to remove. An
+        example could be: {'ip': '1.2.3.4', 'type': 'database'}. The type can
+        be one of 'waf', 'database' or 'ftp'.
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "DELETE", HYPERNODE_API_WHITELIST_ENDPOINT.format(app_name), data=data
         )
 
     def get_current_product_for_app(self, app_name):
@@ -857,6 +925,73 @@ class HypernodeAPIPython:
         """
         return self.requests(
             "POST", HYPERNODE_API_FPM_STATUS_APP_ENDPOINT.format(app_name)
+        )
+
+    def get_insights_annotations(self, params=None):
+        """
+        List all custom Insights annotations for the Hypernodes you have
+        access to. Only annotations created through the API are listed,
+        system annotations generated from platform events are not included.
+        Example:
+        >    client.get_insights_annotations().json()
+        >    {
+        >        'count': 1,
+        >        'next': None,
+        >        'previous': None,
+        >        'results': [
+        >            {
+        >                'id': 123,
+        >                'name': 'Deployed release 1.2.3',
+        >                'x_axis': 1756384957,
+        >                'app': 'yourhypernodeappname',
+        >                'metrics': 'memory_usage',
+        >                'created': '2025-08-28T12:42:37Z',
+        >                'modified': '2025-08-28T12:42:37Z'
+        >            }
+        >        ]
+        >    }
+
+        :param dict params: Optional query parameters to paginate the
+        results with. An example could be: {'limit': 10, 'offset': 20}
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "GET", HYPERNODE_API_INSIGHTS_ANNOTATION_LIST_ENDPOINT, params=params
+        )
+
+    def create_insights_annotation(self, data):
+        """
+        Create a custom Insights annotation for a Hypernode. The annotation
+        is shown in the Insights graphs at the point in time given by
+        'x_axis' (a unix timestamp in seconds). Optionally restrict the
+        annotation to specific graphs with 'metrics', a comma-separated list
+        of metric names. When omitted, the annotation applies to all metrics.
+        Example:
+        >    client.create_insights_annotation(
+        >        data={
+        >            'name': 'Deployed release 1.2.3',
+        >            'x_axis': 1756384957,
+        >            'app': 'yourhypernodeappname',
+        >            'metrics': 'memory_usage'
+        >        }
+        >    ).json()
+        >    {
+        >        'id': 123,
+        >        'name': 'Deployed release 1.2.3',
+        >        'x_axis': 1756384957,
+        >        'app': 'yourhypernodeappname',
+        >        'metrics': 'memory_usage',
+        >        'created': '2025-08-28T12:42:37Z',
+        >        'modified': '2025-08-28T12:42:37Z'
+        >    }
+
+        :param dict data: Data describing the Insights annotation to create.
+        An example could be: {'name': 'Deployed release 1.2.3',
+        'x_axis': 1756384957, 'app': 'yourhypernodeappname'}
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "POST", HYPERNODE_API_INSIGHTS_ANNOTATION_CREATE_ENDPOINT, data=data
         )
 
     def create_brancher(self, app_name, data):

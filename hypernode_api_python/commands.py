@@ -267,6 +267,24 @@ $ ./bin/get_available_backups_for_app
     print_response(client.get_available_backups_for_app(app_name))
 
 
+def create_backup(args=None):
+    parser = ArgumentParser(
+        description="""
+Create a new snapshot backup of the Hypernode. This requires
+sla-standard to be enabled on the Hypernode.
+
+Example:
+$ ./bin/create_backup
+"A job to create a backup has been posted"
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    print_response(client.create_backup(app_name))
+
+
 def get_eav_description(args=None):
     parser = ArgumentParser(
         description="""
@@ -481,6 +499,84 @@ $ ./bin/get_whitelist_rules
     client = get_client()
     app_name = get_app_name()
     print_response(client.get_whitelist_rules(app_name))
+
+
+def add_whitelist_rule(args=None):
+    parser = ArgumentParser(
+        description="""
+Add a WAF whitelist rule for the Hypernode.
+
+Example:
+$ ./bin/add_whitelist_rule 1.2.3.4 --type database --description "my description"
+{
+  "id": 1234,
+  "created": "2024-05-25T13:39:48Z",
+  "domainname": "yourhypernodeappname.hypernode.io",
+  "ip": "1.2.3.4",
+  "type": "database",
+  "description": "my description"
+}
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        "ip",
+        help="The IP address to whitelist",
+    )
+    parser.add_argument(
+        "--type",
+        help="The type of whitelist rule to add",
+        choices=["waf", "database", "ftp"],
+        default="database",
+    )
+    parser.add_argument(
+        "--description",
+        help="An optional description for the whitelist rule",
+        default="",
+    )
+    args = parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    data = {"ip": args.ip, "type": args.type, "description": args.description}
+    print_response(client.add_whitelist_rule(app_name, data=data))
+
+
+def delete_whitelist_rule(args=None):
+    parser = ArgumentParser(
+        description="""
+Remove a WAF whitelist rule for the Hypernode.
+
+Example:
+$ ./bin/delete_whitelist_rule 1.2.3.4 --type database
+Whitelist rule '1.2.3.4' (database) has been removed.
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        "ip",
+        help="The whitelisted IP address to remove. See ./bin/get_whitelist_rules",
+    )
+    parser.add_argument(
+        "--type",
+        help="The type of the whitelist rule to remove",
+        choices=["waf", "database", "ftp"],
+        default="database",
+    )
+    args = parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    data = {"ip": args.ip, "type": args.type}
+    try:
+        client.delete_whitelist_rule(app_name, data=data)
+        print("Whitelist rule '{}' ({}) has been removed.".format(args.ip, args.type))
+        exit(EX_OK)
+    except Exception as e:
+        print(
+            "Whitelist rule '{}' ({}) failed to be removed: {}".format(
+                args.ip, args.type, e
+            )
+        )
+        exit(EX_UNAVAILABLE)
 
 
 def get_current_product_for_app(args=None):
@@ -701,6 +797,105 @@ A job has been posted to cancel the 'yourbrancherappname-eph12345' brancher app.
             )
         )
         exit(EX_UNAVAILABLE)
+
+
+def get_insights_annotations(args=None):
+    parser = ArgumentParser(
+        description="""
+List all custom Insights annotations for the Hypernodes you have access to.
+Only annotations created through the API are listed, system annotations
+generated from platform events are not included.
+
+Example:
+$ ./bin/get_insights_annotations
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 123,
+      "name": "Deployed release 1.2.3",
+      "x_axis": 1756384957,
+      "app": "yourhypernodeappname",
+      "metrics": "memory_usage",
+      "created": "2025-08-28T12:42:37Z",
+      "modified": "2025-08-28T12:42:37Z"
+    }
+  ]
+}
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        "--limit",
+        help="Number of results to return per page",
+        type=int,
+    )
+    parser.add_argument(
+        "--offset",
+        help="The initial index from which to return the results",
+        type=int,
+    )
+    args = parser.parse_args(args=args)
+    client = get_client()
+    params = {}
+    if args.limit is not None:
+        params["limit"] = args.limit
+    if args.offset is not None:
+        params["offset"] = args.offset
+    print_response(client.get_insights_annotations(params=params))
+
+
+def create_insights_annotation(args=None):
+    parser = ArgumentParser(
+        description="""
+Create a custom Insights annotation for the Hypernode. The annotation is
+shown in the Insights graphs at the specified point in time. Optionally
+restrict the annotation to specific graphs with --metrics. When omitted,
+the annotation applies to all metrics.
+
+Example:
+$ ./bin/create_insights_annotation "Deployed release 1.2.3" 1756384957 --metrics memory_usage
+{
+  "id": 123,
+  "name": "Deployed release 1.2.3",
+  "x_axis": 1756384957,
+  "app": "yourhypernodeappname",
+  "metrics": "memory_usage",
+  "created": "2025-08-28T12:42:37Z",
+  "modified": "2025-08-28T12:42:37Z"
+}
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        "name",
+        help="The name of the annotation to create",
+    )
+    parser.add_argument(
+        "x_axis",
+        help="The point in time of the annotation as a unix timestamp in seconds",
+        type=int,
+    )
+    parser.add_argument(
+        "--metrics",
+        help="An optional comma-separated list of metric names to restrict "
+        "the annotation to",
+    )
+    parser.add_argument(
+        "--metadata",
+        help="Optional metadata to store with the annotation",
+    )
+    args = parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    data = {"name": args.name, "x_axis": args.x_axis, "app": app_name}
+    if args.metrics is not None:
+        data["metrics"] = args.metrics
+    if args.metadata is not None:
+        data["metadata"] = args.metadata
+    print_response(client.create_insights_annotation(data=data))
 
 
 def get_fpm_status(args=None):
