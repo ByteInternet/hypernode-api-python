@@ -24,6 +24,7 @@ HYPERNODE_API_BRANCHER_APP_ENDPOINT = "/v2/brancher/app/{}/"
 HYPERNODE_API_FPM_STATUS_APP_ENDPOINT = "/v2/nats/{}/hypernode.show-fpm-status"
 HYPERNODE_API_BRANCHER_ENDPOINT = "/v2/brancher/{}/"
 HYPERNODE_API_INSIGHTS_ANNOTATION_LIST_ENDPOINT = "/v2/insights-annotation/"
+HYPERNODE_API_INSIGHTS_ANNOTATION_CREATE_ENDPOINT = "/v2/insights-annotation/create/"
 HYPERNODE_API_PRODUCT_APP_DETAIL_ENDPOINT = "/v2/product/app/{}/current/"
 HYPERNODE_API_PRODUCT_LIST_ENDPOINT = "/v2/product/"
 HYPERNODE_API_PRODUCT_PRICE_DETAIL_ENDPOINT = "/v2/product/{}/with_price/"
@@ -956,6 +957,41 @@ class HypernodeAPIPython:
         """
         return self.requests(
             "GET", HYPERNODE_API_INSIGHTS_ANNOTATION_LIST_ENDPOINT, params=params
+        )
+
+    def create_insights_annotation(self, data):
+        """
+        Create a custom Insights annotation for a Hypernode. The annotation
+        is shown in the Insights graphs at the point in time given by
+        'x_axis' (a unix timestamp in seconds). Optionally restrict the
+        annotation to specific graphs with 'metrics', a comma-separated list
+        of metric names. When omitted, the annotation applies to all metrics.
+        Example:
+        >    client.create_insights_annotation(
+        >        data={
+        >            'name': 'Deployed release 1.2.3',
+        >            'x_axis': 1756384957,
+        >            'app': 'yourhypernodeappname',
+        >            'metrics': 'memory_usage'
+        >        }
+        >    ).json()
+        >    {
+        >        'id': 123,
+        >        'name': 'Deployed release 1.2.3',
+        >        'x_axis': 1756384957,
+        >        'app': 'yourhypernodeappname',
+        >        'metrics': 'memory_usage',
+        >        'created': '2025-08-28T12:42:37Z',
+        >        'modified': '2025-08-28T12:42:37Z'
+        >    }
+
+        :param dict data: Data describing the Insights annotation to create.
+        An example could be: {'name': 'Deployed release 1.2.3',
+        'x_axis': 1756384957, 'app': 'yourhypernodeappname'}
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "POST", HYPERNODE_API_INSIGHTS_ANNOTATION_CREATE_ENDPOINT, data=data
         )
 
     def create_brancher(self, app_name, data):

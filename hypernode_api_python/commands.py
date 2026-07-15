@@ -847,6 +847,57 @@ $ ./bin/get_insights_annotations
     print_response(client.get_insights_annotations(params=params))
 
 
+def create_insights_annotation(args=None):
+    parser = ArgumentParser(
+        description="""
+Create a custom Insights annotation for the Hypernode. The annotation is
+shown in the Insights graphs at the specified point in time. Optionally
+restrict the annotation to specific graphs with --metrics. When omitted,
+the annotation applies to all metrics.
+
+Example:
+$ ./bin/create_insights_annotation "Deployed release 1.2.3" 1756384957 --metrics memory_usage
+{
+  "id": 123,
+  "name": "Deployed release 1.2.3",
+  "x_axis": 1756384957,
+  "app": "yourhypernodeappname",
+  "metrics": "memory_usage",
+  "created": "2025-08-28T12:42:37Z",
+  "modified": "2025-08-28T12:42:37Z"
+}
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        "name",
+        help="The name of the annotation to create",
+    )
+    parser.add_argument(
+        "x_axis",
+        help="The point in time of the annotation as a unix timestamp in seconds",
+        type=int,
+    )
+    parser.add_argument(
+        "--metrics",
+        help="An optional comma-separated list of metric names to restrict "
+        "the annotation to",
+    )
+    parser.add_argument(
+        "--metadata",
+        help="Optional metadata to store with the annotation",
+    )
+    args = parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    data = {"name": args.name, "x_axis": args.x_axis, "app": app_name}
+    if args.metrics is not None:
+        data["metrics"] = args.metrics
+    if args.metadata is not None:
+        data["metadata"] = args.metadata
+    print_response(client.create_insights_annotation(data=data))
+
+
 def get_fpm_status(args=None):
     parser = ArgumentParser(
         description="""
