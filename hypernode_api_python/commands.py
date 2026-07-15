@@ -799,6 +799,54 @@ A job has been posted to cancel the 'yourbrancherappname-eph12345' brancher app.
         exit(EX_UNAVAILABLE)
 
 
+def get_insights_annotations(args=None):
+    parser = ArgumentParser(
+        description="""
+List all custom Insights annotations for the Hypernodes you have access to.
+Only annotations created through the API are listed, system annotations
+generated from platform events are not included.
+
+Example:
+$ ./bin/get_insights_annotations
+{
+  "count": 1,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 123,
+      "name": "Deployed release 1.2.3",
+      "x_axis": 1756384957,
+      "app": "yourhypernodeappname",
+      "metrics": "memory_usage",
+      "created": "2025-08-28T12:42:37Z",
+      "modified": "2025-08-28T12:42:37Z"
+    }
+  ]
+}
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        "--limit",
+        help="Number of results to return per page",
+        type=int,
+    )
+    parser.add_argument(
+        "--offset",
+        help="The initial index from which to return the results",
+        type=int,
+    )
+    args = parser.parse_args(args=args)
+    client = get_client()
+    params = {}
+    if args.limit is not None:
+        params["limit"] = args.limit
+    if args.offset is not None:
+        params["offset"] = args.offset
+    print_response(client.get_insights_annotations(params=params))
+
+
 def get_fpm_status(args=None):
     parser = ArgumentParser(
         description="""

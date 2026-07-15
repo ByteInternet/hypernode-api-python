@@ -23,6 +23,7 @@ HYPERNODE_API_BLOCK_ATTACK_DESCRIPTION_ENDPOINT = "/v2/app/block_attack_descript
 HYPERNODE_API_BRANCHER_APP_ENDPOINT = "/v2/brancher/app/{}/"
 HYPERNODE_API_FPM_STATUS_APP_ENDPOINT = "/v2/nats/{}/hypernode.show-fpm-status"
 HYPERNODE_API_BRANCHER_ENDPOINT = "/v2/brancher/{}/"
+HYPERNODE_API_INSIGHTS_ANNOTATION_LIST_ENDPOINT = "/v2/insights-annotation/"
 HYPERNODE_API_PRODUCT_APP_DETAIL_ENDPOINT = "/v2/product/app/{}/current/"
 HYPERNODE_API_PRODUCT_LIST_ENDPOINT = "/v2/product/"
 HYPERNODE_API_PRODUCT_PRICE_DETAIL_ENDPOINT = "/v2/product/{}/with_price/"
@@ -923,6 +924,38 @@ class HypernodeAPIPython:
         """
         return self.requests(
             "POST", HYPERNODE_API_FPM_STATUS_APP_ENDPOINT.format(app_name)
+        )
+
+    def get_insights_annotations(self, params=None):
+        """
+        List all custom Insights annotations for the Hypernodes you have
+        access to. Only annotations created through the API are listed,
+        system annotations generated from platform events are not included.
+        Example:
+        >    client.get_insights_annotations().json()
+        >    {
+        >        'count': 1,
+        >        'next': None,
+        >        'previous': None,
+        >        'results': [
+        >            {
+        >                'id': 123,
+        >                'name': 'Deployed release 1.2.3',
+        >                'x_axis': 1756384957,
+        >                'app': 'yourhypernodeappname',
+        >                'metrics': 'memory_usage',
+        >                'created': '2025-08-28T12:42:37Z',
+        >                'modified': '2025-08-28T12:42:37Z'
+        >            }
+        >        ]
+        >    }
+
+        :param dict params: Optional query parameters to paginate the
+        results with. An example could be: {'limit': 10, 'offset': 20}
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "GET", HYPERNODE_API_INSIGHTS_ANNOTATION_LIST_ENDPOINT, params=params
         )
 
     def create_brancher(self, app_name, data):
