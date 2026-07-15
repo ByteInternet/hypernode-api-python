@@ -541,6 +541,44 @@ $ ./bin/add_whitelist_rule 1.2.3.4 --type database --description "my description
     print_response(client.add_whitelist_rule(app_name, data=data))
 
 
+def delete_whitelist_rule(args=None):
+    parser = ArgumentParser(
+        description="""
+Remove a WAF whitelist rule for the Hypernode.
+
+Example:
+$ ./bin/delete_whitelist_rule 1.2.3.4 --type database
+Whitelist rule '1.2.3.4' (database) has been removed.
+""",
+        formatter_class=RawTextHelpFormatter,
+    )
+    parser.add_argument(
+        "ip",
+        help="The whitelisted IP address to remove. See ./bin/get_whitelist_rules",
+    )
+    parser.add_argument(
+        "--type",
+        help="The type of the whitelist rule to remove",
+        choices=["waf", "database", "ftp"],
+        default="database",
+    )
+    args = parser.parse_args(args=args)
+    client = get_client()
+    app_name = get_app_name()
+    data = {"ip": args.ip, "type": args.type}
+    try:
+        client.delete_whitelist_rule(app_name, data=data)
+        print("Whitelist rule '{}' ({}) has been removed.".format(args.ip, args.type))
+        exit(EX_OK)
+    except Exception as e:
+        print(
+            "Whitelist rule '{}' ({}) failed to be removed: {}".format(
+                args.ip, args.type, e
+            )
+        )
+        exit(EX_UNAVAILABLE)
+
+
 def get_current_product_for_app(args=None):
     parser = ArgumentParser(
         description="""

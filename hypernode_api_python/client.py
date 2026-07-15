@@ -624,6 +624,29 @@ class HypernodeAPIPython:
             "POST", HYPERNODE_API_WHITELIST_ENDPOINT.format(app_name), data=data
         )
 
+    def delete_whitelist_rule(self, app_name, data):
+        """
+        Remove a whitelist rule for the specified app. See get_whitelist_rules
+        for the currently configured whitelist rules. On success the response
+        will have status_code 204 and no content.
+        Example:
+        >    client.delete_whitelist_rule(
+        >        'yourhypernodeappname',
+        >        data={'ip': '1.2.3.4', 'type': 'database'}
+        >    ).status_code
+        >    204
+
+        :param str app_name: The name of the Hypernode to remove the whitelist
+        rule for
+        :param dict data: Data describing the whitelist rule to remove. An
+        example could be: {'ip': '1.2.3.4', 'type': 'database'}. The type can
+        be one of 'waf', 'database' or 'ftp'.
+        :return obj response: The request response object
+        """
+        return self.requests(
+            "DELETE", HYPERNODE_API_WHITELIST_ENDPOINT.format(app_name), data=data
+        )
+
     def get_current_product_for_app(self, app_name):
         """
         Retrieve information about the product the specified App is currently on.
